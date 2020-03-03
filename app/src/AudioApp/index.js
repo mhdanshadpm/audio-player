@@ -24,6 +24,22 @@ export const AudioApp = () => {
         setIsPlaying(false);
     }
 
+    const plusAudioVolume = () => {
+        const currentVolume = playerRef.current.volume;
+        const shouldUpdateVolume = currentVolume < 1;
+        if ( shouldUpdateVolume ) {
+            playerRef.current.volume = (currentVolume + 0.1).toFixed(2);
+        }
+    }
+
+    const minusAudioVolume = () => {
+        const currentVolume = playerRef.current.volume;
+        const shouldUpdateVolume = currentVolume > 0;
+        if ( shouldUpdateVolume ) {
+            playerRef.current.volume = (currentVolume - 0.1).toFixed(2);
+        }
+    }
+
     const renderPlayerControls = () => (
         <div id='player-controls'>
             <div id='play-pause' onClick={togglePlay}>
@@ -35,10 +51,10 @@ export const AudioApp = () => {
             <div id='mute' onClick={toggleMute}>
                 {isMuted ? <VolumeOff /> : <VolumeUp/>}
             </div>
-            <div id='volume-plus'>
+            <div id='volume-plus' onClick={plusAudioVolume}>
                 <AddCircle />
             </div>
-            <div id='volume-minus'>
+            <div id='volume-minus' onClick={minusAudioVolume}>
                 <RemoveCircle />
             </div>
         </div>
