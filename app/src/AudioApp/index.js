@@ -1,15 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PlayCircleFilled, PauseCircleFilled, Stop, VolumeUp, AddCircle, RemoveCircle, VolumeOff } from '@material-ui/icons';
 import audio from '../Assets/Audio/song.mp3';
+import moment from 'moment';
 
 export const AudioApp = () => {
     const playerRef = useRef();
     const [isPlaying, setIsPlaying] = useState(false); 
     const [isMuted, setIsMuted] = useState(false); 
+    const [duration, setDuration] = useState(0); 
+    const [currentTime, setCurrentTime] = useState(0); 
 
     useEffect(() => {
         isPlaying ? playerRef.current.play() : playerRef.current.pause() ;
-    },[isPlaying]);
+        const duration = playerRef.current.duration || 0 ;
+        setDuration(duration);
+    },[isPlaying, duration, currentTime]);
+
+    useEffect(() => {
+        const time = setInterval(()=>{
+            const currentTime = playerRef.current.currentTime || 0;
+            setCurrentTime(currentTime)
+        },1000);
+        return () => {
+            clearInterval(time);
+        };
+    }, [currentTime])
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying);
@@ -39,6 +54,9 @@ export const AudioApp = () => {
             playerRef.current.volume = (currentVolume - 0.1).toFixed(2);
         }
     }
+    
+    const getFormattedTime = (seconds) => moment.utc(seconds*1000).format('mm:ss');
+    const getTimePercentage = () => ( currentTime / duration * 100).toFixed(2);
 
     const renderPlayerControls = () => (
         <div id='player-controls'>
@@ -63,14 +81,26 @@ export const AudioApp = () => {
         <audio
             src={audio}
             id='player'
-            controls
             muted={isMuted}
             ref={playerRef}
+            onLoadedData = {()=>setDuration(playerRef.current.duration)}
         />
     );
+    const renderPlaybackTime = () => (
+        <div id="time-percentage-wrapper">
+            <div id="time">
+                {getFormattedTime(currentTime)}/
+                {getFormattedTime(duration)}
+            </div>
+            <div id="percentage">
+                {currentTime ? getTimePercentage(): '0.00'}%
+            </div>
+        </div>
+    )
     return (
         <div className='audio-app'>
             <div id='audio-player-card'>
+                {renderPlaybackTime()}
                 {renderAudio()}
                 {renderPlayerControls()}
             </div>

@@ -15,11 +15,20 @@
     text-align: center;
     background: linear-gradient(to right, #9ba9ef, #a3eeb6);
     box-shadow: 3px 4px 10px rgba(136, 136, 136, 1);
+    #time-percentage-wrapper {
+        font-size: 1.5rem;
+        font-weight: 500;
+        display: flex;
+        justify-content: space-evenly;
+    }
     #player-controls {
         display: flex;
         justify-content: space-evenly;
         #play-pause, #stop, #mute, #volume-plus, #volume-minus{
             color: rgb(49, 62, 81);
+            .MuiSvgIcon-root {
+                font-size: 2rem;
+            }
             &:hover{
                 opacity: 0.5;
                 cursor: pointer;
