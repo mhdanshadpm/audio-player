@@ -1,20 +1,31 @@
-import React from "react";
-import { PlayCircleFilled, Stop, VolumeUp, AddCircle, RemoveCircle } from '@material-ui/icons';
+import React, { useState, useRef, useEffect } from "react";
+import { PlayCircleFilled, PauseCircleFilled, Stop, VolumeUp, AddCircle, RemoveCircle } from '@material-ui/icons';
 import audio from '../Assets/Audio/song.mp3';
 
 export const AudioApp = () => {
+    const playerRef = useRef();
+    const [isPlaying, setIsPlaying] = useState(false); 
     const renderAudio = () => (
         <audio
             src={audio}
             id='player'
             controls
+            ref={playerRef}
         />
     );
+    
+    useEffect(() => {
+        isPlaying ? playerRef.current.play() : playerRef.current.pause() ;
+    },[isPlaying]);
+
+    const togglePlay = () => {
+        setIsPlaying(!isPlaying);
+    }
 
     const renderPlayerControls = () => (
         <div id="player-controls">
-            <div id="play-pause">
-                <PlayCircleFilled />
+            <div id="play-pause" onClick={togglePlay}>
+                {isPlaying ? <PauseCircleFilled /> : <PlayCircleFilled />}
             </div>
             <div id="stop">
                 <Stop />
