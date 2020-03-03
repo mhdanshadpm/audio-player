@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import { PlayCircleFilled, PauseCircleFilled, Stop, VolumeUp, AddCircle, RemoveCircle } from '@material-ui/icons';
 import audio from '../Assets/Audio/song.mp3';
 
@@ -13,7 +13,7 @@ export const AudioApp = () => {
             ref={playerRef}
         />
     );
-    
+
     useEffect(() => {
         isPlaying ? playerRef.current.play() : playerRef.current.pause() ;
     },[isPlaying]);
@@ -22,29 +22,34 @@ export const AudioApp = () => {
         setIsPlaying(!isPlaying);
     }
 
+    const stopAudio = () => {
+        playerRef.current.currentTime = 0;
+        setIsPlaying(false);
+    }
+
     const renderPlayerControls = () => (
-        <div id="player-controls">
-            <div id="play-pause" onClick={togglePlay}>
+        <div id='player-controls'>
+            <div id='play-pause' onClick={togglePlay}>
                 {isPlaying ? <PauseCircleFilled /> : <PlayCircleFilled />}
             </div>
-            <div id="stop">
+            <div id='stop' onClick={stopAudio}>
                 <Stop />
             </div>
-            <div id="mute">
+            <div id='mute'>
                 <VolumeUp />
             </div>
-            <div id="volume-plus">
+            <div id='volume-plus'>
                 <AddCircle />
             </div>
-            <div id="volume-minus">
+            <div id='volume-minus'>
                 <RemoveCircle />
             </div>
         </div>
     );
 
     return (
-        <div className="audio-app">
-            <div id="audio-player-card">
+        <div className='audio-app'>
+            <div id='audio-player-card'>
                 {renderAudio()}
                 {renderPlayerControls()}
             </div>
