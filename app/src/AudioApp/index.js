@@ -4,12 +4,12 @@ import audio from '../Assets/Audio/song.mp3';
 import moment from 'moment';
 
 export const AudioApp = () => {
-    const playerRef = useRef();
-    const [isPlaying, setIsPlaying] = useState(false); 
-    const [isMuted, setIsMuted] = useState(false); 
-    const [duration, setDuration] = useState(0); 
-    const [currentTime, setCurrentTime] = useState(0); 
-    const [isSlidable, setIsSlidable] = useState(false); 
+    const playerRef                         = useRef();
+    const [isPlaying, setIsPlaying]         = useState(false); 
+    const [isMuted, setIsMuted]             = useState(false); 
+    const [duration, setDuration]           = useState(0); 
+    const [currentTime, setCurrentTime]     = useState(0); 
+    const [isSlidable, setIsSlidable]       = useState(false); 
 
     useEffect(() => {
         isPlaying ? playerRef.current.play() : playerRef.current.pause() ;
@@ -41,31 +41,31 @@ export const AudioApp = () => {
     }
 
     const plusAudioVolume = () => {
-        const currentVolume = playerRef.current.volume;
-        const shouldUpdateVolume = currentVolume < 1;
+        const currentVolume         = playerRef.current.volume;
+        const shouldUpdateVolume    = currentVolume < 1;
         if ( shouldUpdateVolume ) {
             playerRef.current.volume = (currentVolume + 0.1).toFixed(2);
         }
     }
 
     const minusAudioVolume = () => {
-        const currentVolume = playerRef.current.volume;
-        const shouldUpdateVolume = currentVolume > 0;
+        const currentVolume         = playerRef.current.volume;
+        const shouldUpdateVolume    = currentVolume > 0;
         if ( shouldUpdateVolume ) {
             playerRef.current.volume = (currentVolume - 0.1).toFixed(2);
         }
     }
 
     const jumpToSelectedTime = (e) => {
-        const sliderPosition = e.pageX - e.target.offsetLeft;
-        const sliderWidth = e.target.offsetWidth;
-        const percentageOfSliderPosition = (sliderPosition / sliderWidth) * 100;
-        playerRef.current.currentTime = (percentageOfSliderPosition * duration) / 100;
+        const sliderPosition                = e.pageX - e.target.offsetLeft;
+        const sliderWidth                   = e.target.offsetWidth;
+        const percentageOfSliderPosition    = (sliderPosition / sliderWidth) * 100;
+        playerRef.current.currentTime       = (percentageOfSliderPosition * duration) / 100;
         setCurrentTime((percentageOfSliderPosition * duration) / 100);
     }
     
-    const getFormattedTime = (seconds) => moment.utc(seconds*1000).format('mm:ss');
-    const getTimePercentage = () => ( currentTime / duration * 100).toFixed(2);
+    const getFormattedTime      = (seconds) => moment.utc(seconds*1000).format('mm:ss');
+    const getTimePercentage     = () => ( currentTime / duration * 100).toFixed(2);
 
     const renderPlayerControls = () => (
         <div id='player-controls'>
