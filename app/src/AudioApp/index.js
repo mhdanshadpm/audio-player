@@ -9,6 +9,7 @@ export const AudioApp = () => {
     const [isMuted, setIsMuted] = useState(false); 
     const [duration, setDuration] = useState(0); 
     const [currentTime, setCurrentTime] = useState(0); 
+    const [isSlidable, setIsSlidable] = useState(false); 
 
     useEffect(() => {
         isPlaying ? playerRef.current.play() : playerRef.current.pause() ;
@@ -54,6 +55,14 @@ export const AudioApp = () => {
             playerRef.current.volume = (currentVolume - 0.1).toFixed(2);
         }
     }
+
+    const jumpToSelectedTime = (e) => {
+        const sliderPosition = e.pageX - e.target.offsetLeft;
+        const sliderWidth = e.target.offsetWidth;
+        const percentageOfSliderPosition = (sliderPosition / sliderWidth) * 100;
+        playerRef.current.currentTime = (percentageOfSliderPosition * duration) / 100;
+        setCurrentTime((percentageOfSliderPosition * duration) / 100);
+    }
     
     const getFormattedTime = (seconds) => moment.utc(seconds*1000).format('mm:ss');
     const getTimePercentage = () => ( currentTime / duration * 100).toFixed(2);
@@ -77,6 +86,12 @@ export const AudioApp = () => {
             </div>
         </div>
     );
+
+    const resetPlayer = () => {
+        playerRef.current.currentTime = 0;
+        setIsPlaying(false);
+    }
+
     const renderAudio = () => (
         <audio
             src={audio}
@@ -84,6 +99,7 @@ export const AudioApp = () => {
             muted={isMuted}
             ref={playerRef}
             onLoadedData = {()=>setDuration(playerRef.current.duration)}
+            onEnded={resetPlayer}
         />
     );
     const renderPlaybackTime = () => (
@@ -97,12 +113,30 @@ export const AudioApp = () => {
             </div>
         </div>
     )
+
+    const renderTimeBar = () => (
+        <div id="time-bar-wrap">
+            <div
+                id="time-bar"
+                style={{ width: `${getTimePercentage().toString()}%` }}
+            />
+            <div id="time-seeker" 
+                onMouseMove={isSlidable ? jumpToSelectedTime : ()=>{}} 
+                onMouseLeave={()=>{setIsSlidable(false)}}
+                onClick={jumpToSelectedTime} 
+                onMouseDown={()=>setIsSlidable(true)} 
+                onMouseUp={()=>setIsSlidable(false)}>
+            </div>
+        </div>
+    );
+
     return (
         <div className='audio-app'>
-            <div id='audio-player-card'>
+            <div id='audio-player-card' >
                 {renderPlaybackTime()}
                 {renderAudio()}
                 {renderPlayerControls()}
+                {renderTimeBar()}
             </div>
         </div>
     );

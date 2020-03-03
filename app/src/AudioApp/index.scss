@@ -36,5 +36,29 @@
         } 
 
     }
+    #time-bar-wrap{
+        width: 90%;
+        height: 15px;
+        border-radius: 10px;
+        background: white;
+        margin-left: auto;
+        margin-right: auto;
+        #time-bar{
+            min-width: 1px;
+            height: 100%;
+            border-radius: 10px;
+            background: rgba(86, 161, 244,1);
+        }
+        #time-seeker {
+            width:100%;
+            height: 100%;
+            border-radius: 15px;
+            background: transparent;
+            position: relative; 
+            top:-100%;
+            left:0;
+            z-index: 10px;
+        }
+    }
   }
 }
